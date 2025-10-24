@@ -5,20 +5,14 @@ import heapq
 # (这就是你将要专注于编写的部分)
 
 def reconstruct_path(previous_nodes, start_node, end_node):
-    """根据 previous_nodes 字典回溯并构建完整路径"""
-    path = []
-    current_node = end_node
+    path=[]
+    current_node=end_node
     while current_node is not None:
         path.append(current_node)
-        if current_node == start_node:
-            break
-        current_node = previous_nodes.get(current_node) # 使用 .get() 更安全
-    
-    # 如果路径没有到达起点，说明路径不通
-    if path[-1] != start_node:
-        return None
-        
-    return path[::-1] # 反转列表，得到从起点到终点的顺序
+        current_node=previous_nodes.get(current_node)
+    path.reverse()
+    if path and path[0] == start_node:
+        return path
 
 
 def dijkstra(graph, start_node, end_node):
@@ -30,7 +24,7 @@ def dijkstra(graph, start_node, end_node):
     # 1. 初始化
     distances = {node: float('infinity') for node in graph}
     distances[start_node] = 0
-    previous_nodes = {node: None for node in graph}
+    previous_nodes = {node: None for node in graph}#字典推导式，遍历graph所有键传到node，再将node对应的值赋值为None
     
     pq = [(0, start_node)]
     
