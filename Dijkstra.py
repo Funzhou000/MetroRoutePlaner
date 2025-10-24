@@ -15,48 +15,29 @@ def reconstruct_path(previous_nodes, start_node, end_node):
         return path
 
 
-def dijkstra(graph, start_node, end_node):
-    # 0. 健壮性检查
-    if start_node not in graph or end_node not in graph:
-        print("错误：起点或终点不存在于图中。")
-        return None, None
-
-    # 1. 初始化
-    distances = {node: float('infinity') for node in graph}
-    distances[start_node] = 0
-    previous_nodes = {node: None for node in graph}#字典推导式，遍历graph所有键传到node，再将node对应的值赋值为None
-    
-    pq = [(0, start_node)]
-    
-    # 2. 算法主循环
+def dijkstra(graph,start_node,end_node):
+    distance={node:float('inf')for node in graph}
+    distance[start_node]=0
+    previous_node={node:None for node in graph}#字典推导式，遍历graph所有键传到node，再将node对应的值赋值为None
+    pq=[(0,start_node)]
     while pq:
-        current_distance, current_node = heapq.heappop(pq)
-        
-        if current_distance > distances[current_node]:
+        current_distance,current_node=heapq.heappop(pq)
+        if current_distance>distance[current_node]:
             continue
-        
-        if current_node == end_node:
+        if current_node==end_node:#end while
             break
-            
         if current_node in graph:
             for neighbor, weight in graph[current_node]:
-                distance = current_distance + weight
-                
-                if distance < distances[neighbor]:
-                    distances[neighbor] = distance
-                    # 【关键修正】记录正确的来源节点
-                    previous_nodes[neighbor] = current_node
-                    heapq.heappush(pq, (distance, neighbor))
-                    
-    # 3. 返回结果
-    # 检查是否找到了路径
-    if distances[end_node] == float('infinity'):
-        return None, None # 返回None表示路径不存在
+                newtime=weight+current_distance
+                if newtime<distance[neighbor]:
+                    distance[neighbor]=newtime
+                    previous_node[neighbor]=current_node
+                    heapq.heappush(pq(newtime,neighbor))  
+    path=reconstruct_path(previous_node,start_node,end_node)          
+    if distance[end_node] == float('infinity'):
+        return None, None  
+    return distance[end_node],path
 
-    # 使用辅助函数构建路径
-    path = reconstruct_path(previous_nodes, start_node, end_node)
-
-    return distances[end_node], path
 # --- 主程序逻辑 ---
 def main():
     graph_filename = 'metro_graph.pkl'
