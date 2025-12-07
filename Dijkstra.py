@@ -32,7 +32,7 @@ def dijkstra(graph,start_node,end_node):
                 if newtime<distance[neighbor]:
                     distance[neighbor]=newtime
                     previous_node[neighbor]=current_node
-                    heapq.heappush(pq(newtime,neighbor))  
+                    heapq.heappush(pq, (newtime,neighbor))  
     path=reconstruct_path(previous_node,start_node,end_node)          
     if distance[end_node] == float('infinity'):
         return None, None  
